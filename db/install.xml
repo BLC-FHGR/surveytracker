@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/surveytracker/db" VERSION="20220823" COMMENT="XMLDB file for survey tracker plugin">
+  <TABLES>
+    <TABLE NAME="surveytracker" COMMENT="each record is a module">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"></FIELD>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="type" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"></FIELD>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="surveytracker_surveys" COMMENT="each record is a survey">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"></FIELD>
+        <FIELD NAME="moduleid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="creatorid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="surveyurl" TYPE="text" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="subject" TYPE="text" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false"></FIELD>
+        <FIELD NAME="createdate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="expirydate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="points" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="visibility" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"></FIELD>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="surveytracker_participants" COMMENT="each record is a participation on a survey">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"></FIELD>
+        <FIELD NAME="moduleid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="surveyid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="participantid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="startdate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+        <FIELD NAME="enddate" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"></FIELD>
+        <FIELD NAME="points" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"></FIELD>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

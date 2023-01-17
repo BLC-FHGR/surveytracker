@@ -1,0 +1,159 @@
+{{!
+@template mod_surveytracker/coursemoduleinfo
+}}
+<div id="surveytrackertable">
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th class="left">{{locale.survey}}</th>
+      <th>{{locale.points}}</th>
+      <th>{{locale.expires}}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#surveys}}
+    <tr>
+      <td>
+        {{^participated}}
+        {{^editable}}▶️ {{/editable}}
+        {{#editable}}✴️ {{/editable}}
+        {{/participated}}
+        {{#participated}}✅ {{/participated}}
+      </td>
+      <td class="left">
+        <a href="/mod/surveytracker/surveyredirect.php?moduleid={{currentmoduleid}}&surveyid={{id}}">{{subject}}</a>
+        <cite>{{description}}</cite>
+      </td>
+      <td>{{points}}
+        {{#editable}}<br>
+        <span>{{locale.participants}}:&nbsp;{{participants}}</span>
+        {{/editable}}
+      </td>
+      <td>{{#userdate}} {{expirydate}}, %d.%m.%Y {{/userdate}}</td>
+      <td>
+        {{#editable}}
+        <a href="/mod/surveytracker/view_edit.php?moduleid={{moduleid}}&surveyid={{id}}" class="edit btn btn-primary">{{locale.edit}}</a>
+        {{/editable}}
+      </td>
+    </tr>
+    {{#editable}}
+    <tr class="editor">
+      <td colspan="5" class="left" onclick="copytoclipboard('{{redirecturl}}', this)">
+        <div class="endurl"><input type="text" value="{{redirecturl}}"/></div>
+      </td>
+    </tr>
+    {{/editable}}
+    {{/surveys}}
+  </tbody>
+</table>
+
+<div class="actionwrapper"><a class="btn btn-primary" href="/mod/surveytracker/view_edit.php?moduleid={{currentmoduleid}}&surveyid=">{{locale.add}}</a></div>
+</div>
+<style>
+  #surveytrackertable, .actionwrapper {
+    width: 100%;
+    max-width: calc(800px + 1rem);
+    margin: auto;
+  }
+
+  #surveytrackertable table {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+  }
+
+  .actionwrapper {
+    margin: 1em auto;
+    text-align: right;
+  }
+
+  #surveytrackertable tbody tr:not(.editor):hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  #surveytrackertable th, #surveytrackertable td {
+    text-align: right;
+    vertical-align: top;
+    padding: .5rem;
+  }
+
+  #surveytrackertable tr:not(.editor) td {
+    border-top: 1px solid #eee;
+  }
+
+  #surveytrackertable tr td span {
+    font-size: .75em;
+  }
+
+  #surveytrackertable tr.editor td {
+    font-size: .8em;
+  }
+
+  #surveytrackertable tr.editor [onclick] {
+    cursor: pointer;
+    position: relative;
+  }
+
+  #surveytrackertable tr.editor .endurl {
+    display: block;
+  }
+
+  #surveytrackertable tr.editor input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid;
+    outline: none;
+    background: #eee;
+    padding: .2em .5em;
+  }
+
+  #surveytrackertable tr.editor [onclick]::after {
+    content: "";
+    position: absolute;
+    inset: auto .2em .2em auto;
+    background-color: rgba(0,0,0,0.05);
+    color: #666;
+  }
+
+  #surveytrackertable tr.editor [onclick]:hover::after {
+    content: "» {{locale.clicktocopy}}";
+    padding: .2em;
+  }
+
+  #surveytrackertable tr.editor [onclick].copied::after {
+    content: "» {{locale.copied}} «";
+    padding: .2em;
+  }
+
+  #surveytrackertable .left {
+    text-align: left;
+  }
+
+  #surveytrackertable th:first-child, #surveytrackertable td:first-child {
+    width: 1em;
+  }
+
+  #surveytrackertable th:nth-child(2) {
+    width: 90%;
+  }
+
+  #surveytrackertable cite {
+    display: block;
+    margin: .5rem 0;
+  }
+</style>
+<script>
+{{#userlistlink}}
+document.querySelector('nav.moremenu ul.nav.more-nav.nav-tabs li:first-child')
+.insertAdjacentHTML('afterend', '<li data-key="modulepage" class="nav-item"><a role="menuitem" class="nav-link" href="/mod/surveytracker/view_userlist.php?id={{cmid}}">{{locale.userlist}}</a></li>');
+{{/userlistlink}}
+
+function copytoclipboard(copyText, el) {
+   /* Copy the text inside the text field */
+  navigator.clipboard.writeText(copyText);
+
+  el.classList.add('copied');
+  setTimeout(() => { el.classList.remove('copied'); }, 3000);
+}
+</script>

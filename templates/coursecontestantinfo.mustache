@@ -1,0 +1,100 @@
+{{!
+@template mod_surveytracker/coursecontestantinfo
+}}
+<table id="surveytrackertable">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th colspan="3" class="over">{{locale.surveys}}</th>
+      <th colspan="2" class="over">{{locale.contestant}}</th>
+    </tr>
+    <tr>
+      <th class="left">{{locale.firstname}}</th>
+      <th class="left">{{locale.lastname}}</th>
+      <th class="middle">{{locale.amount}}</th>
+      <th class="middle">{{locale.surveyparticipations}}</th>
+      <th class="middle">{{locale.surveyparticipationspoints}}</th>
+      <th>{{locale.contestantcount}}</th>
+      <th>{{locale.contestantpoints}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#coursemembers}}
+    <tr>
+      <td class="left">{{firstname}}</td>
+      <td class="left">{{lastname}}</td>
+      <td class="middle">{{#surveys}}{{surveys}}{{/surveys}}{{^surveys}}0{{/surveys}}</td>
+      <td class="middle">{{#surveyparticipations}}{{surveyparticipations}}{{/surveyparticipations}}{{^surveyparticipations}}0{{/surveyparticipations}}</td>
+      <td class="middle">{{#surveyparticipationspoints}}{{surveyparticipationspoints}}{{/surveyparticipationspoints}}{{^surveyparticipationspoints}}0{{/surveyparticipationspoints}}</td>
+      <td>{{#contestantcount}}{{contestantcount}}{{/contestantcount}}{{^contestantcount}}0{{/contestantcount}}</td>
+      <td>{{#contestantpoints}}{{contestantpoints}}{{/contestantpoints}}{{^contestantpoints}}0{{/contestantpoints}}</td>
+    </tr>
+    {{/coursemembers}}
+  </tbody>
+</table>
+
+<div class="actionwrapper"><button class="btn btn-primary" onclick="ExportToExcel()">{{locale.export}}</button></div>
+
+<style>
+  #surveytrackertable, .actionwrapper {
+    width: 100%;
+    max-width: calc(800px + 1rem);
+    margin: auto;
+  }
+
+  #surveytrackertable {
+    border-bottom: 1px solid #eee;
+  }
+
+  .actionwrapper {
+    margin: 1em auto;
+    text-align: right;
+  }
+
+  #surveytrackertable tbody tr:not(.editor):hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  #surveytrackertable th, #surveytrackertable td {
+    text-align: center;
+    vertical-align: top;
+    padding: .5rem;
+  }
+
+  #surveytrackertable tr td {
+    border-top: 1px solid #eee;
+  }
+
+  #surveytrackertable .left {
+    text-align: left;
+    width: 20%;
+  }
+
+  #surveytrackertable .over {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+
+  #surveytrackertable .middle {
+    background-color: rgba(0, 0, 0, 0.025);
+  }
+
+
+</style>
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+<script>
+document.querySelector('nav.moremenu ul.nav.more-nav.nav-tabs li:first-child')
+.insertAdjacentHTML('afterend', '<li data-key="modulepage" class="nav-item"><a role="menuitem" class="nav-link active active_tree_node" href="/mod/surveytracker/view_userlist.php?id={{cmid}}">{{locale.userlist}}</a></li>');
+
+function ExportToExcel(fn, dl) {
+       var elt = document.getElementById('surveytrackertable');
+       var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+       return dl ?
+         XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'base64' }):
+         XLSX.writeFile(wb, fn || ('download.xlsx'));
+}
+
+</script>
