@@ -165,18 +165,3 @@ function surveytracker_cm_info_view($cm) {
   $cm->set_content($content);
 }
 
-function surveytracker_extend_navigation_course(
-    navigation_node $parentnode,
-    stdClass $course,
-    context_course $context
-) {
-  $parentnode->add(
-        "Display text",
-        new moodle_url('/index.php'),
-        navigation_node::TYPE_SETTING,
-        null,
-        "local_example_item",
-        new pix_icon('i/courseevent', '')
-    );
-
-}
