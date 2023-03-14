@@ -83,6 +83,8 @@ class edit_form extends \moodleform {
       $mform->setDefault('expiry', date('U', $survey->expirydate));
       $mform->setDefault('points', $survey->points);
       $mform->setDefault('visibility', $survey->visibility);
+    } else {
+        $mform->setDefault('expiry', date('U', mktime(23, 59, 0)));
     }
 
     $styles = '<style>
