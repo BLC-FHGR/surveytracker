@@ -51,7 +51,7 @@ class edit_form extends \moodleform {
     $mform->setType('description', PARAM_NOTAGS);
     $mform->addHelpButton('description', 'form:description', 'surveytracker');
 
-    $mform->addElement('date_selector', 'expiry', get_string('edit:expiry', 'surveytracker'));
+    $mform->addElement('date_time_selector', 'expiry', get_string('edit:expiry', 'surveytracker'));
     $mform->setType('expiry', PARAM_NOTAGS);
     $mform->addHelpButton('expiry', 'form:expiry', 'surveytracker');
 
