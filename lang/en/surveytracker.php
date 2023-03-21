@@ -52,6 +52,7 @@ $string['surveytracker:moduleonly'] = 'This course only';
 $string['table:survey'] = 'Survey';
 $string['table:points'] = 'Points';
 $string['table:expires'] = 'Expires';
+$string['table:expired'] = 'abgelaufen';
 $string['table:add'] = 'add survey';
 $string['table:edit'] = 'edit';
 $string['table:participants'] = 'Participants';

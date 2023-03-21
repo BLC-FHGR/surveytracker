@@ -71,6 +71,7 @@
    'add' => get_string('table:add', 'surveytracker'),
    'edit' => get_string('table:edit', 'surveytracker'),
    'expires' => get_string('table:expires', 'surveytracker'),
+   'expired' => get_string('table:expired', 'surveytracker'),
    'participants' => get_string('table:participants', 'surveytracker'),
    'clicktocopy' => get_string('table:clicktocopy', 'surveytracker'),
    'copied' => get_string('table:copied', 'surveytracker'),
@@ -85,23 +86,41 @@
 
  $is_global = ($surveytracker->type == 2 ? ' OR visibility = 2' : '');
 
- $surveys = $DB->get_records_sql(
+ $surveys_new = $DB->get_records_sql(
    'SELECT * FROM {surveytracker_surveys} WHERE (moduleid = :moduleid' . $is_global . ') AND expirydate > :expirydate ORDER BY expirydate ASC;',
    [
      'moduleid' => $cm->instance,
      'expirydate' => time(),
    ]
  );
- foreach($surveys as $survey) {
-   $survey->editable = $USER->id == $survey->creatorid;
-   $survey->user = $USER->id;
-   $survey->participated = participantlib::has_participated($survey->id);
-   if ($survey->editable) {
-     $survey->participants = participantlib::count_by_surveyid($survey->id);
-     $survey->redirecturl = $CFG->wwwroot . '/mod/surveytracker/surveyreferrer.php?STmid=' . $cm->instance . '&STsid=' . $survey->id . '&STpid={PASSTHRU:STpid}';
-   }
-   $data->surveys[] = $survey;
- }
+$surveys_old = $DB->get_records_sql(
+    'SELECT * FROM {surveytracker_surveys} WHERE (moduleid = :moduleid' . $is_global . ') AND expirydate <= :expirydate ORDER BY expirydate DESC;',
+    [
+        'moduleid' => $cm->instance,
+        'expirydate' => time(),
+    ]
+);
+foreach($surveys_new as $survey) {
+    $survey->editable = $USER->id == $survey->creatorid;
+    $survey->user = $USER->id;
+    $survey->participated = participantlib::has_participated($survey->id);
+    if ($survey->editable) {
+        $survey->participants = participantlib::count_by_surveyid($survey->id);
+        $survey->redirecturl = $CFG->wwwroot . '/mod/surveytracker/surveyreferrer.php?STmid=' . $cm->instance . '&STsid=' . $survey->id . '&STpid={PASSTHRU:STpid}';
+    }
+    $survey->active = true;
+    $data->surveys[] = $survey;
+}
+foreach($surveys_old as $survey) {
+    $survey->editable = false;
+    $survey->user = $USER->id;
+    $survey->participated = participantlib::has_participated($survey->id);
+    if ($USER->id == $survey->creatorid) {
+        $survey->participants = participantlib::count_by_surveyid($survey->id);
+    }
+    $survey->active = false;
+    $data->surveys[] = $survey;
+}
 
  echo $OUTPUT->render_from_template('mod_surveytracker/coursemoduleinfo', $data);
  echo $OUTPUT->footer();

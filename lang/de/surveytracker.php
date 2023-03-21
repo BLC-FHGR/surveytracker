@@ -52,6 +52,7 @@ $string['surveytracker:moduleonly'] = 'Nur für diesen Kurs';
 $string['table:survey'] = 'Umfrage';
 $string['table:points'] = 'Punkte';
 $string['table:expires'] = 'Läuft ab am';
+$string['table:expired'] = 'abgelaufen';
 $string['table:add'] = 'Umfrage hinzufügen';
 $string['table:edit'] = 'bearbeiten';
 $string['table:participants'] = 'Teilnehmer';

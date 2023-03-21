@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 /** @var stdClass $plugin */
 
-$plugin->version   = 2022090200;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2023032103;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021052300;        // Requires this Moodle version.
 $plugin->component = 'mod_surveytracker';

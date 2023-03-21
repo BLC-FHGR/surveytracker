@@ -8,33 +8,44 @@
       <th></th>
       <th class="left">{{locale.survey}}</th>
       <th>{{locale.points}}</th>
-      <th>{{locale.expires}}</th>
+      <th class="expiry">{{locale.expires}}</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     {{#surveys}}
-    <tr>
+    <tr{{^active}} class="inactive"{{/active}}>
       <td>
-        {{^participated}}
-        {{^editable}}▶️ {{/editable}}
-        {{#editable}}✴️ {{/editable}}
-        {{/participated}}
-        {{#participated}}✅ {{/participated}}
+        {{^active}}🚫 {{/active}}
+        {{#active}}
+            {{^participated}}
+                {{^editable}}▶️ {{/editable}}
+                {{#editable}}✴️ {{/editable}}
+            {{/participated}}
+            {{#participated}}✅ {{/participated}}
+        {{/active}}
       </td>
+      {{#active}}
       <td class="left">
         <a href="/mod/surveytracker/surveyredirect.php?moduleid={{currentmoduleid}}&surveyid={{id}}">{{subject}}</a>
         <cite>{{description}}</cite>
       </td>
-      <td>{{points}}
-        {{#editable}}<br>
-        <span>{{locale.participants}}:&nbsp;{{participants}}</span>
-        {{/editable}}
+      {{/active}}
+      {{^active}}
+      <td class="left" style="color: #666;">
+        <div>{{subject}} ({{locale.expired}})</div>
+        <cite>{{description}}</cite>
       </td>
-      <td>{{#userdate}} {{expirydate}}, %d.%m.%Y %H:%M {{/userdate}}</td>
+      {{/active}}
+      <td>{{points}}
+        {{#participants}}<br>
+        <span>{{locale.participants}}:&nbsp;{{participants}}</span>
+        {{/participants}}
+      </td>
+      <td class="expiry">{{#userdate}} {{expirydate}}, %d.%m.%Y %H:%M {{/userdate}}</td>
       <td>
         {{#editable}}
-        <a href="/mod/surveytracker/view_edit.php?moduleid={{moduleid}}&surveyid={{id}}" class="edit btn btn-primary">{{locale.edit}}</a>
+        <a href="/mod/surveytracker/view_edit.php?moduleid={{moduleid}}&surveyid={{id}}" class="edit btn btn-primary" title="{{locale.edit}}">📝️</a>
         {{/editable}}
       </td>
     </tr>
@@ -130,12 +141,16 @@
     text-align: left;
   }
 
+  #surveytrackertable .inactive {
+    color: #666;
+  }
+
   #surveytrackertable th:first-child, #surveytrackertable td:first-child {
     width: 1em;
   }
 
   #surveytrackertable th:nth-child(2) {
-    width: 90%;
+    width: 50%;
   }
 
   #surveytrackertable cite {
