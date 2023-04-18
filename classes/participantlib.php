@@ -74,19 +74,30 @@ class participantlib {
   static function has_participated($surveyid) {
     global $DB, $USER;
 
-    return $DB->count_records('surveytracker_participants', array('surveyid' => $surveyid, 'participantid' => $USER->id));
+    $records = $DB->get_record_sql('SELECT COUNT(enddate) as count FROM {surveytracker_participants} WHERE surveyid = :surveyid AND participantid = :participantid AND enddate IS NOT NULL;',
+      [
+          'surveyid' => $surveyid,
+          'participantid' => $USER->id
+      ]
+    );
+    return $records->count;
   }
 
   static function count_by_surveyid($surveyid) {
     global $DB;
 
-    return $DB->count_records('surveytracker_participants', array('surveyid' => $surveyid));
+    $records = $DB->get_record_sql('SELECT COUNT(enddate) as count FROM {surveytracker_participants} WHERE surveyid = :surveyid AND enddate IS NOT NULL;',
+        [
+            'surveyid' => $surveyid
+        ]
+    );
+    return $records->count;
   }
 
   static function sum_points_by_surveyid($surveyid) {
     global $DB;
 
-    return $DB->get_records_sql('SELECT SUM(points) FROM {surveytracker_participants} WHERE surveyid = :surveyid;',
+    return $DB->get_records_sql('SELECT SUM(points) FROM {surveytracker_participants} WHERE surveyid = :surveyid AND enddate IS NOT NULL;',
     [
       'surveyid' => $surveyid
     ]
@@ -99,7 +110,7 @@ class participantlib {
     return $DB->get_record_sql(
       'SELECT COUNT(id) AS contestantcount,
       SUM(points) AS contestantpoints
-      FROM {surveytracker_participants} WHERE participantid = :userid;',
+      FROM {surveytracker_participants} WHERE participantid = :userid AND enddate IS NOT NULL;',
       [
         'userid' => $USER->id,
       ]
@@ -118,6 +129,7 @@ class participantlib {
         LEFT JOIN (
           SELECT surveyid, COUNT(crp.id) AS crpcount, SUM(crp.points) AS crpsum
           FROM {surveytracker_participants} crp
+          WHERE crp.enddate IS NOT NULL
           GROUP BY crp.surveyid
         ) AS crp
         ON crp.surveyid = crs.id
@@ -146,6 +158,7 @@ class participantlib {
               LEFT JOIN (
                 SELECT surveyid, COUNT(crp.id) AS crpcount, SUM(crp.points) AS crpsum
                 FROM {surveytracker_participants} crp
+                WHERE crp.enddate IS NOT NULL
                 GROUP BY crp.surveyid
               ) AS crp
               ON crp.surveyid = crs.id
@@ -155,6 +168,7 @@ class participantlib {
             LEFT JOIN (
               SELECT participantid, COUNT(cop.id) AS copcount, SUM(cop.points) AS copsum
               FROM {surveytracker_participants} cop
+              WHERE cop.enddate IS NOT NULL
               GROUP BY cop.participantid
             ) AS cop
             ON cop.participantid = usr.id

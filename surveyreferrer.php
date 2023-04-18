@@ -30,28 +30,37 @@ $mid = optional_param('STmid', 0, PARAM_INT);  // Module instance ID
 $sid = optional_param('STsid', 0, PARAM_INT);  // Survey instance ID
 $pid = optional_param('STpid', 0, PARAM_INT);  // Participant instance ID
 
+// Umfrage-Teilnehmer laden
 if (!$participant = $DB->get_record('surveytracker_participants', array('id' => $pid))) {
     print_error('invalidaccessparameter');
 }
 
+// Umfrage-Block laden
 if (!$surveytracker = $DB->get_record('surveytracker', array('id' => $participant->moduleid))) {
   print_error('invalidaccessparameter');
 }
 $cm = get_coursemodule_from_instance('surveytracker', $surveytracker->id, $surveytracker->course, false, MUST_EXIST);
+
+// Modul laden
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
 
+// redirect, falls bereits teilgenommen
 if ($participant->enddate > 0) {
   redirect('/mod/surveytracker/view.php?id=' . $cm->id, get_string('surveysolvedearlier', 'surveytracker'));
 }
 
+// Kurs-Berechtigung prüfen
 require_course_login($course, true, $cm);
 $context = context_module::instance($cm->id);
+// Umfrage-Berechtigung prüfen
 require_capability('mod/surveytracker:view', $context);
 
+// Umfrage laden
 if (!$survey = $DB->get_record('surveytracker_surveys', array('id' => $sid))) {
     print_error('invalidaccessparameter');
 }
 
+// Umfragen-Teilnahme updaten
 $participant = participantlib::update_instance($participant);
 
 if (!$participant) {
