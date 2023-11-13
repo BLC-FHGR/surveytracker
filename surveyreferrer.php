@@ -31,7 +31,7 @@ $sid = optional_param('STsid', 0, PARAM_INT);  // Survey instance ID
 $pid = optional_param('STpid', 0, PARAM_INT);  // Participant instance ID
 
 // Umfrage-Teilnehmer laden
-if (!$participant = $DB->get_record('surveytracker_participants', array('id' => $pid))) {
+if (!$participant = $DB->get_record('surveytracker_participants', array('moduleid' => $mid, 'surveyid' => $sid))) {
     print_error('invalidaccessparameter');
 }
 
