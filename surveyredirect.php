@@ -63,6 +63,6 @@ if ($pid === 0) {
 } else if ($pid === -1) { // wenn Umfrage früher abgeschlossen
   redirect($_SERVER['HTTP_REFERER'], get_string('surveysolvedearlier', 'surveytracker'));
 } else { // zur Umfrage
-  header('Location: ' . $survey->surveyurl . (strpos($survey->surveyurl, '?') >= 0 ? '&' : '?') . 'STpid=' . $pid );
+  header('Location: ' . $survey->surveyurl . (strpos($survey->surveyurl, '?') > 0 ? '&' : '?') . 'STpid=' . $pid );
 }
 die();
