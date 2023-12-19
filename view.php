@@ -106,7 +106,7 @@ foreach($surveys_new as $survey) {
     $survey->participated = participantlib::has_participated($survey->id);
     if ($survey->editable) {
         $survey->participants = participantlib::count_by_surveyid($survey->id);
-        $survey->redirecturl = $CFG->wwwroot . '/mod/surveytracker/surveyreferrer.php?STmid=' . $cm->instance . '&STsid=' . $survey->id;
+        $survey->redirecturl = $CFG->wwwroot . '/mod/surveytracker/surveyreferrer.php?STsid=' . $survey->id;
     }
     $survey->active = true;
     $data->surveys[] = $survey;
