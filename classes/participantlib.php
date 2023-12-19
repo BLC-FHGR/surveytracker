@@ -18,7 +18,7 @@ class participantlib {
   }
 
   static function add_instance($data) {
-    global $DB, $USER;
+    global $DB;
 
     print_r($data);
 
@@ -42,6 +42,16 @@ class participantlib {
 
     return $id;
   }
+
+    static function get_instance_by_surveyid($sruveyid) {
+        global $DB, $USER;
+
+        if (!$participant = $DB->get_record('surveytracker_participants', array('participantid' => $USER->id, 'surveyid' => $sruveyid))) {
+            return false;
+        }
+
+        return $participant;
+    }
 
   static function update_instance($data) {
     global $DB;

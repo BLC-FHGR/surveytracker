@@ -26,12 +26,10 @@
 require_once('../../config.php');
 require_once($CFG->dirroot . '/mod/surveytracker/classes/participantlib.php');
 
-$mid = optional_param('STmid', 0, PARAM_INT);  // Module instance ID
 $sid = optional_param('STsid', 0, PARAM_INT);  // Survey instance ID
-$pid = optional_param('STpid', 0, PARAM_INT);  // Participant instance ID
 
 // Umfrage-Teilnehmer laden
-if (!$participant = $DB->get_record('surveytracker_participants', array('moduleid' => $mid, 'surveyid' => $sid))) {
+if (!$participant = participantlib::get_instance_by_surveyid($sid)) {
     print_error('invalidaccessparameter');
 }
 
